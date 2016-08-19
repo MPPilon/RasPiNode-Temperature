@@ -75,18 +75,6 @@ var server = new opcua.OPCUAServer({
    resourcePath: "OPCUA/Dipper" //The custom resource path for the server
 });
 
-
-var next_sensor = function(arr) {
-   var counter = arr.length;
-   return function() {
-      counter += 1;
-      if (counter>=arr.length) {
-        counter = 0;
-      }
-      return arr[counter];
-   };
-}(sensors);
-
 server.buildInfo.productName = "TemperatureSensor";
 server.buildInfo.buildNumber = "0001";
 server.buildInfo.buildDate = new Date(2016,7,19);
@@ -94,8 +82,6 @@ server.buildInfo.buildDate = new Date(2016,7,19);
 
 function post_initialize() {
     console.log("Server Initialized");
-
-
 
     function construct_my_address_space(server) {
       /*
