@@ -42,7 +42,7 @@ gpio.on("change", function(channel, value) {
 
 //Set up the interval timer to read the frequency regularly
 //The interval is in milliseconds, so 1000 is 1 second
-//1000ms is likely ideal, giving a 1 second refresh rate
+//1000ms is likely ideal, giving a 1 second refresh rate (1hz)
 var interval = 1000;
 setInterval(function() {
   sensor.forEach(function(sensorName) { //For each sensor we list
@@ -55,7 +55,7 @@ setInterval(function() {
 //To avoid repeating ourselves or having awful numbers scattered everywhere
 //we use this function in order to ensure our pin numbers are all tidy and
 //in one place for easy editing and consistent retrieval
-var getSensorPin = function(sensor, callback) {
+var getSensorPin = function(sensor) {
   var pinNumber = 0;
   switch (sensor) {
     case "temperature":
@@ -65,6 +65,7 @@ var getSensorPin = function(sensor, callback) {
       console.log("ERROR");
       break;
   }
+  console.log("Sensor name <" + sensor + "> has been assigned to pin " + pinNumber);
   return pinNumber;
 };
 
@@ -91,7 +92,9 @@ function post_initialize() {
       */
       var sensorsFolder  = server.engine.addressSpace.addFolder("ObjectsFolder",{ browseName: "Sensors"});
 
-      //Now we start declaring variables in that folder to monitor
+      //Now we can start declaring variables in that folder to monitor.
+      //This function does that, which is called later in a loop to
+      //set up each variable we've asked for
       function create_SensorNode(theSensor) {
          // Create the variables to be read and sent
         server.engine.addressSpace.addVariable({ //Create the variable
